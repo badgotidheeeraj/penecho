@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -20,10 +20,10 @@ import banner from '../../assets/Banner/Banner.png';
 const defaultTheme = createTheme();
 
 export default function SignUp() {
-  const [password, setPassword] = React.useState('');
-  const [confirmPassword, setConfirmPassword] = React.useState('');
-  const [response, setResponse] = React.useState('');
-  const [passwordMatch, setPasswordMatch] = React.useState(true);
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [response, setResponse] = useState('');
+  const [passwordMatch, setPasswordMatch] = useState(true);
   const navigate = useNavigate();
 
   const handlePasswordChange = (e) => {
@@ -94,115 +94,119 @@ export default function SignUp() {
         }}
       >
         <CssBaseline />
-        <Paper elevation={10} sx={{ padding: 3 }}>
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-              <LockOutlinedIcon />
-            </Avatar>
-            <Typography component="h1" variant="h5">
-              Sign Up
-            </Typography>
-            {response && (
-              <Typography color="error.main" sx={{ mt: 1 }}>
-                {response}
-              </Typography>
-            )}
-            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3, width: 500, height: 'auto' }}>
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    autoComplete="given-name"
-                    name="firstName"
-                    required
-                    fullWidth
-                    id="firstName"
-                    label="First Name"
-                    autoFocus
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="lastName"
-                    label="Last Name"
-                    name="lastName"
-                    autoComplete="family-name"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="email"
-                    label="Email Address"
-                    name="email"
-                    autoComplete="email"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    name="password"
-                    label="Password"
-                    type="password"
-                    id="password"
-                    onChange={handlePasswordChange}
-                    autoComplete="new-password"
-                    value={password}
-                    sx={{ bgcolor: 'background.paper' }}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    name="confirmPassword"
-                    label="Confirm Password"
-                    type="password"
-                    id="confirmPassword"
-                    onChange={handleConfirmPasswordChange}
-                    autoComplete="new-password"
-                    value={confirmPassword}
-                    sx={{ bgcolor: 'background.paper' }}
-                  />
-                  <Typography color={passwordMatch ? 'success.main' : 'error.main'} sx={{ mt: 1 }}>
-                    {passwordMatch ? "Passwords match" : "Passwords do not match"}
-                  </Typography>
-                </Grid>
-                <Grid item xs={12}>
-                  <FormControlLabel
-                    control={<Checkbox value="allowExtraEmails" color="primary" />}
-                    label="I want to receive inspiration, marketing promotions, and updates via email."
-                  />
-                </Grid>
-              </Grid>
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-                disabled={!passwordMatch}
+        <Grid container justifyContent="center">
+          <Grid item xs={12} sm={8} md={5} lg={4}>
+            <Paper elevation={15} sx={{ padding: 3, mt: 8 }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                }}
               >
-                Sign Up
-              </Button>
-              <Grid container justifyContent="flex-end">
-                <Grid item>
-                  <Link href="/" variant="body2">
-                    Already have an account? Sign In
-                  </Link>
-                </Grid>
-              </Grid>
-            </Box>
-          </Box>
-        </Paper>
+                <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                  <LockOutlinedIcon />
+                </Avatar>
+                <Typography component="h1" variant="h5">
+                  Sign Up
+                </Typography>
+                {response && (
+                  <Typography color="error.main" sx={{ mt: 1 }}>
+                    {response}
+                  </Typography>
+                )}
+                <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3, width: '100%' }}>
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        autoComplete="given-name"
+                        name="firstName"
+                        required
+                        fullWidth
+                        id="firstName"
+                        label="First Name"
+                        autoFocus
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        required
+                        fullWidth
+                        id="lastName"
+                        label="Last Name"
+                        name="lastName"
+                        autoComplete="family-name"
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        required
+                        fullWidth
+                        id="email"
+                        label="Email Address"
+                        name="email"
+                        autoComplete="email"
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        required
+                        fullWidth
+                        name="password"
+                        label="Password"
+                        type="password"
+                        id="password"
+                        onChange={handlePasswordChange}
+                        autoComplete="new-password"
+                        value={password}
+                        sx={{ bgcolor: 'background.paper' }}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        required
+                        fullWidth
+                        name="confirmPassword"
+                        label="Confirm Password"
+                        type="password"
+                        id="confirmPassword"
+                        onChange={handleConfirmPasswordChange}
+                        autoComplete="new-password"
+                        value={confirmPassword}
+                        sx={{ bgcolor: 'background.paper' }}
+                      />
+                      <Typography color={passwordMatch ? 'success.main' : 'error.main'} sx={{ mt: 1 }}>
+                        {passwordMatch ? "Passwords match" : "Passwords do not match"}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <FormControlLabel
+                        control={<Checkbox value="allowExtraEmails" color="primary" />}
+                        label="I want to receive inspiration, marketing promotions, and updates via email."
+                      />
+                    </Grid>
+                  </Grid>
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2 }}
+                    disabled={!passwordMatch}
+                  >
+                    Sign Up
+                  </Button>
+                  <Grid container justifyContent="flex-end">
+                    <Grid item>
+                      <Link href="/" variant="body2">
+                        Already have an account? Sign In
+                      </Link>
+                    </Grid>
+                  </Grid>
+                </Box>
+              </Box>
+            </Paper>
+          </Grid>
+        </Grid>
       </Container>
     </ThemeProvider>
   );

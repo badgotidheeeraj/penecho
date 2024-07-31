@@ -23,7 +23,7 @@ function App() {
             <Routes>
             {/* <Route path="/" element={(token === token1) && user ? <Navigate to='/dashboard' /> : <Login />} /> */}
               <Route path="/" element={<Login/>} />
-              <Route path="/sing-up" element={<Sing />} />
+              <Route path="/sign-up" element={<Sing />} />
               <Route path="/create-blog" element={<BlogWirte />} />
               <Route path="/views-detail" element={<BlogReader />} />
               <Route path="/profile-user" element={<Profile />} />
