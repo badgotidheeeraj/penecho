@@ -41,7 +41,7 @@ export default function SignIn() {
       if (response.data.access && response.data.refresh) {
         console.log('Response:', response.data);
         setToken(response.data.access);
-        navigate('/profile');
+        navigate('/home-page');
       }
     } catch (error) {
       const errorMessage = error.response

@@ -27,7 +27,7 @@ function App() {
               <Route path="/create-blog" element={<BlogWirte />} />
               <Route path="/views-detail" element={<BlogReader />} />
               <Route path="/profile-user" element={<Profile />} />
-              <Route path="/profile" element={<BlogShow />} />
+              <Route path="/home-page" element={<BlogShow />} />
               <Route path="/post" element={<AddCreate />} />
             </Routes>
           </Router>

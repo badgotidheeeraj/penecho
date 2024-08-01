@@ -95,7 +95,7 @@ function ResponsiveCard() {
               <CardActionArea>
                 <CardMedia
                   component="img"
-                  image={`${process.env.REACT_APP_BASE_URL}${detaildata.file}`}
+                  image={`${process.env.REACT_APP_BASE_URL_IMG_FLE}${detaildata.file}`}
                   className={classes.media}
                   alt="Photo"
                 />

@@ -64,7 +64,7 @@ const BlogForm = () => {
 
       if (response.data) {
         console.log('Response:', response.data);
-        navigate('/profile');
+        navigate('/home-page');
       }
     } catch (error) {
       if (error.response) {

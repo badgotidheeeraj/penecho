@@ -4,9 +4,11 @@ import UserContext from '../Auth/UserContext';
 import DrawerComponent from "../Drawer/Drawer";
 import ToolbarComponent from "../Toolbar/Toolbar";
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const ProductForm = () => {
   const { token } = useContext(UserContext);
+  const navigate = useNavigate();
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -62,6 +64,7 @@ const ProductForm = () => {
           }
         );
         console.log(result.data);
+        navigate('/home-page'); // Redirect to home page
       } catch (error) {
         console.error("Error submitting the form:", error);
       }
