@@ -40,7 +40,7 @@ function ResponsiveCard() {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
   const { token } = useContext(UserContext);
-
+  
   useEffect(() => {
     const fetchDetailsAndComments = async () => {
       const id = new URLSearchParams(location.search).get('id');
@@ -68,6 +68,7 @@ function ResponsiveCard() {
           }
         );
         setComments(commentsResult.data);
+        console.log(commentsResult.data);
         
       } catch (error) {
         console.error("Error fetching data:", error);
