@@ -16,7 +16,6 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import banner from '../../assets/Banner/Banner.png';
-
 const defaultTheme = createTheme();
 
 export default function SignUp() {
@@ -25,6 +24,7 @@ export default function SignUp() {
   const [response, setResponse] = useState('');
   const [passwordMatch, setPasswordMatch] = useState(true);
   const navigate = useNavigate();
+
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
@@ -76,6 +76,7 @@ export default function SignUp() {
       }
     }
   };
+
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -197,6 +198,7 @@ export default function SignUp() {
                   </Button>
                   <Grid container justifyContent="flex-end">
                     <Grid item>
+                     {/* <Button onClick={handleLogin}>Sign In</Button>; */}
                       <Link href="/" variant="body2">
                         Already have an account? Sign In
                       </Link>
@@ -211,3 +213,4 @@ export default function SignUp() {
     </ThemeProvider>
   );
 }
+

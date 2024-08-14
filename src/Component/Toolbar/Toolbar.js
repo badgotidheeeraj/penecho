@@ -12,9 +12,20 @@ import Menu from "@material-ui/core/Menu";
 import MenuIcon from "@material-ui/icons/Menu";
 import SearchIcon from "@material-ui/icons/Search";
 import AccountCircle from "@material-ui/icons/AccountCircle";
-import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import axios from 'axios';
+
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
 import { useNavigate } from "react-router-dom";
 
 const styles = (theme) => ({
@@ -80,10 +91,35 @@ const styles = (theme) => ({
 });
 
 const ToolbarComponent = ({ classes, openDrawerHandler, title }) => {
-  const { removeToken } = useContext(UserContext);
+;
+  const { removeToken,token } = useContext(UserContext);
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
+  const [notificationAnchorEl, setNotificationAnchorEl] = useState(null); // State for notification menu
+  const [walletOpen, setWalletOpen] = useState(false); // State for wallet dialog
+  const [moneyTransfer, setMoneyTransfer] = useState([]); // State for wallet dialog
   const navigate = useNavigate();
+
+
+  React.useEffect(() => {
+    const fetchAddCampaigns = async () => {
+        try {
+            const result = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/priceforadd/`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            setMoneyTransfer(result.data.data);
+
+        } catch (error) {
+            console.error("Error fetching campaigns:", error);
+        }
+    };
+    fetchAddCampaigns()
+}, [token]);
+
+
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -102,7 +138,6 @@ const ToolbarComponent = ({ classes, openDrawerHandler, title }) => {
   };
 
   const handleLogout = () => {
-    // Handle additional logout logic if needed
     handleMenuClose();
   };
 
@@ -110,8 +145,25 @@ const ToolbarComponent = ({ classes, openDrawerHandler, title }) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  const handleNotificationMenuOpen = (event) => {
+    setNotificationAnchorEl(event.currentTarget);
+  };
+
+  const handleNotificationMenuClose = () => {
+    setNotificationAnchorEl(null);
+  };
+
+  const handleWalletOpen = () => {
+    setWalletOpen(true);
+  };
+
+  const handleWalletClose = () => {
+    setWalletOpen(false);
+  };
+
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const isNotificationMenuOpen = Boolean(notificationAnchorEl);
 
   const menuId = "primary-search-account-menu";
   const renderMenu = (
@@ -140,17 +192,17 @@ const ToolbarComponent = ({ classes, openDrawerHandler, title }) => {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
-        <IconButton aria-label="show 4 new mails" color="inherit">
+      <MenuItem onClick={handleWalletOpen}>
+        <IconButton aria-label="show wallet" color="inherit">
           <Badge badgeContent={4} color="secondary">
-            <MailIcon />
+            <AccountBalanceWalletIcon />
           </Badge>
         </IconButton>
-        <p>Messages</p>
+        <p>Wallet</p>
       </MenuItem>
-      <MenuItem>
-        <IconButton aria-label="show 11 new notifications" color="inherit">
-          <Badge badgeContent={11} color="secondary">
+      <MenuItem onClick={handleNotificationMenuOpen}>
+        <IconButton aria-label="show 17 new notifications" color="inherit">
+          <Badge badgeContent={17} color="secondary">
             <NotificationsIcon />
           </Badge>
         </IconButton>
@@ -167,6 +219,27 @@ const ToolbarComponent = ({ classes, openDrawerHandler, title }) => {
         </IconButton>
         <p>Profile</p>
       </MenuItem>
+    </Menu>
+  );
+
+  const notificationMenuId = "primary-notification-menu";
+  const renderNotificationMenu = (
+    <Menu
+      anchorEl={notificationAnchorEl}
+      anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      id={notificationMenuId}
+      keepMounted
+      transformOrigin={{ vertical: "top", horizontal: "right" }}
+      open={isNotificationMenuOpen}
+      onClose={handleNotificationMenuClose}
+    >
+      <MenuItem>
+        <Typography variant="body2">Notification 1</Typography>
+      </MenuItem>
+      <MenuItem>
+        <Typography variant="body2">Notification 2</Typography>
+      </MenuItem>
+      {/* Add more notifications as needed */}
     </Menu>
   );
 
@@ -201,12 +274,20 @@ const ToolbarComponent = ({ classes, openDrawerHandler, title }) => {
           </div>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            <IconButton aria-label="show 4 new mails" color="inherit">
+            <IconButton
+              aria-label="show wallet"
+              color="inherit"
+              onClick={handleWalletOpen} // Open the wallet dialog
+            >
               <Badge badgeContent={4} color="secondary">
-                <MailIcon />
+                <AccountBalanceWalletIcon />
               </Badge>
             </IconButton>
-            <IconButton aria-label="show 17 new notifications" color="inherit">
+            <IconButton
+              aria-label="show 17 new notifications"
+              color="inherit"
+              onClick={handleNotificationMenuOpen} // Open the notification menu
+            >
               <Badge badgeContent={17} color="secondary">
                 <NotificationsIcon />
               </Badge>
@@ -237,6 +318,35 @@ const ToolbarComponent = ({ classes, openDrawerHandler, title }) => {
       </AppBar>
       {renderMobileMenu}
       {renderMenu}
+      {renderNotificationMenu}
+
+
+
+      {/* Wallet Dialog */}
+      <Dialog open={walletOpen} onClose={handleWalletClose}>
+        <DialogTitle>Wallet</DialogTitle>
+        <DialogContent>
+          {/* moneyTransfer */}
+          <DialogContentText variant='h4'>Total Money:₹{moneyTransfer.map((key, index) => (key.TotalPrice))}</DialogContentText> {/* Replace with dynamic value */}
+          <Typography variant="h6">Recent Transactions</Typography>
+          <List>
+            {moneyTransfer.map((key, index) => (
+              <ListItem key={key.id}>  
+                <ListItemText primary="Transaction" secondary={`₹: ${key.TranctionsAmount} On ${key.DateTime}`} />
+                <Typography variant="body2" color="textSecondary">
+                  {key.description}
+                </Typography>
+              </ListItem>
+            ))}
+
+          </List>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleWalletClose} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };

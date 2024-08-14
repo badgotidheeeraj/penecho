@@ -29,7 +29,7 @@ const DrawerComponent = ({ left, toggleDrawerHandler }) => {
       onKeyDown={toggleDrawerHandler}
     >
       <List>
-        <Link href="/profile" style={{ textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/home-page" style={{ textDecoration: 'none', color: 'inherit' }}>
           <ListItem button>
             <ListItemIcon>
               <AccountCircleIcon />

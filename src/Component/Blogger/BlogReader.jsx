@@ -1,13 +1,12 @@
-import React, { useEffect, useState ,useContext} from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
-  Container, Grid, Paper, CardHeader, Avatar, TextField, CardActionArea, CardMedia, CardContent, Typography, makeStyles
+  Container, Grid, Paper, CardHeader, Avatar, TextField, CardActionArea, CardMedia, CardContent, Typography, makeStyles, Button
 } from '@material-ui/core';
 import { useLocation } from 'react-router-dom';
 import DrawerComponent from "../Drawer/Drawer";
 import axios from 'axios';
 import ToolbarComponent from "../Toolbar/Toolbar";
 import UserContext from '../Auth/UserContext';
-
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     padding: theme.spacing(2),
-    marginBottom: theme.spacing(3), // Add margin bottom to separate the sections
+    marginBottom: theme.spacing(3),
   },
   avatar: {
     backgroundColor: theme.palette.primary.main,
@@ -28,47 +27,80 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     marginTop: theme.spacing(2),
   },
+  commentButton: {
+    marginTop: theme.spacing(2),
+  }
 }));
 
 function ResponsiveCard() {
   const location = useLocation();
   const classes = useStyles();
-  const [detaildata, setDetailData] = useState({});
+  const [detailData, setDetailData] = useState({});
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [text, setText] = useState('');
+  const [comments, setComments] = useState([]);
+  const [newComment, setNewComment] = useState('');
   const { token } = useContext(UserContext);
 
-  const detopldata = {
-    title: 'John Doe',
-    DateTime: 'July 17, 2024',
-  };
-
   useEffect(() => {
-    const fetchPhotos = async () => {
+    const fetchDetailsAndComments = async () => {
       const id = new URLSearchParams(location.search).get('id');
       try {
-        const result = await axios.get(
-          `${process.env.REACT_APP_BASE_URL}/bloger-creater-id/${id}`,
+        const detailResult = await axios.get(
+          `${process.env.REACT_APP_BASE_URL}/blogs/${id}/`,
           {
             headers: {
               Authorization: `Bearer ${token}`
             }
           }
         );
-        setDetailData(result.data.data);
+        setDetailData(detailResult.data.data);
+
+        // Fetch comments
+        const commentsResult = await axios.get(
+          `${process.env.REACT_APP_BASE_URL}/comments/`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            },
+            params: {
+              blog_id: id
+            }
+          }
+        );
+        setComments(commentsResult.data);
+        
       } catch (error) {
-        console.error("Error fetching photos:", error);
+        console.error("Error fetching data:", error);
       }
     };
 
-    fetchPhotos();
-  }, [location.search,token]);
+    fetchDetailsAndComments();
+  }, [location.search, token]);
 
   const toggleDrawer = (open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
     }
     setDrawerOpen(open);
+  };
+
+  const handleCommentSubmit = async () => {
+    const id = new URLSearchParams(location.search).get('id');
+    try {
+      const result = await axios.post(
+        `${process.env.REACT_APP_BASE_URL}/comments/`,
+        { text: newComment, blog: id },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+      setComments([...comments, result.data]);
+      setNewComment('');
+    } catch (error) {
+      console.error("Error submitting comment:", error);
+    }
   };
 
   return (
@@ -81,54 +113,71 @@ function ResponsiveCard() {
       <Container maxWidth="md" className={classes.root}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            {/* First Section: Main Content */}
+            {/* Main Content */}
             <Paper elevation={15} className={classes.paper}>
               <CardHeader
                 avatar={
                   <Avatar className={classes.avatar}>
-                    {detaildata.title ? detaildata.title[0] : ''}
+                    {detailData.title ? detailData.title[0] : ''}
                   </Avatar>
                 }
-                title={detaildata.title}
-                subheader={detaildata.DateTime}
+                title={detailData.title}
+                subheader={new Date(detailData.DateTime).toLocaleString()}
               />
               <CardActionArea>
                 <CardMedia
                   component="img"
-                  image={`${process.env.REACT_APP_BASE_URL_IMG_FLE}${detaildata.file}`}
+                  image={detailData.file}
                   className={classes.media}
                   alt="Photo"
                 />
                 <CardContent>
                   <Typography variant="h6">
-                    {detaildata.blog}
+                    {detailData.content}
                   </Typography>
                 </CardContent>
               </CardActionArea>
             </Paper>
 
-            {/* Second Section: User Input */}
+            {/* Comments */}
             <Paper className={classes.paper}>
-              <Typography variant="subtitle1" gutterBottom>
-                Your text here
+              <Typography variant="h6" gutterBottom>
+                Comments
               </Typography>
-              <CardHeader
-                avatar={
-                  <Avatar className={classes.avatar}>
-                    {detopldata.title ? detopldata.title[0] : ''}
-                  </Avatar>
-                }
-                title={detopldata.title}
-                subheader={detopldata.DateTime}
-              />
+              {comments.map((comment, index) => (
+                <Paper key={index} className={classes.paper}>
+                  <CardHeader
+                    avatar={
+                      <Avatar className={classes.avatar}>
+                        {comment.author ? comment.author[0] : ''}
+                      </Avatar>
+                    }
+                    title={comment.author}
+                    subheader={new Date(comment.created_at).toLocaleString()}
+                  />
+                  <CardContent>
+                    <Typography variant="body1">
+                      {comment.text}
+                    </Typography>
+                  </CardContent>
+                </Paper>
+              ))}
               <TextField
                 className={classes.textField}
                 variant="outlined"
-                label="Enter your text"
-                placeholder="Type something here..."
-                value={text}
-                onChange={(e) => setText(e.target.value)}
+                label="Add a comment"
+                placeholder="Type your comment here..."
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
               />
+              <Button
+                variant="contained"
+                color="primary"
+                className={classes.commentButton}
+                onClick={handleCommentSubmit}
+              >
+                Submit Comment
+              </Button>
             </Paper>
           </Grid>
         </Grid>
