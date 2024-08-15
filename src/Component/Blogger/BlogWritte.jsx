@@ -55,7 +55,7 @@ const BlogForm = () => {
     }
 
     try {
-      const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/bloger-creater`, formData, {
+      const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/Blogger`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`

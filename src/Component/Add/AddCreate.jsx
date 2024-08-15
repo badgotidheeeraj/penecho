@@ -118,7 +118,7 @@ const ProductForm = () => {
                 </Typography>
                 <Typography variant="h4" component="div" color="primary">
                  
-                  $:{moneyPaisaDollar.map((key, index) => (key.TotalPrice))}
+                ₹:<span style={{color:"green"}}>{moneyPaisaDollar.map((key, index) => (key.TotalPrice))}</span>
                   <AccountBalanceWalletIcon sx={{ fontSize: 40, marginLeft: 2 }} />
                 </Typography>
                 <Typography sx={{ mt: 1 }} color="text.secondary">

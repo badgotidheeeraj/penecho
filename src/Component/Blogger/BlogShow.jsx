@@ -62,7 +62,7 @@ const CardComponent = () => {
     useEffect(() => {
         const fetchPhotos = async () => {
             try {
-                const result = await axios.get(`${process.env.REACT_APP_BASE_URL}/show-blogger?search=${user}&category=${category}`, {
+                const result = await axios.get(`${process.env.REACT_APP_BASE_URL}/Blogger?search=${user}&category=${category}`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -80,7 +80,7 @@ const CardComponent = () => {
     useEffect(() => {
         const fetchAddCampaigns = async () => {
             try {
-                const result = await axios.get(`${process.env.REACT_APP_BASE_URL}/add-campaign`, {
+                const result = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/digitalmarketpost/`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -235,7 +235,7 @@ const CardComponent = () => {
                             <CardActionArea>
                                 <CardMedia
                                     component="img"
-                                    src={photo.file}
+                                    src={photo ? photo.file : `${process.env.REACT_APP_BASE_URL}${photo.file}`} //{photo.file}
                                     alt="Uploaded Image"
                                     className={classes.media}
                                 />
@@ -270,10 +270,11 @@ const CardComponent = () => {
                                 <CardMedia
                                     component="img"
                                     height="140"
-                                    image={add.image}
+                                    image={add ? add.image : `${process.env.REACT_APP_BASE_URL}${add.image}`}
                                     alt={add.title}
                                     className={classes.media}
                                 />
+                                {/* {add ? add.image : `${process.env.REACT_APP_BASE_URL}${add.image}`} */}
                                 <CardContent>
                                     <Typography gutterBottom variant="h5" component="div">
                                         {add.title}

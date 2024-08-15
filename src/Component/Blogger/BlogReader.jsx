@@ -40,13 +40,13 @@ function ResponsiveCard() {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
   const { token } = useContext(UserContext);
-  
+
   useEffect(() => {
     const fetchDetailsAndComments = async () => {
       const id = new URLSearchParams(location.search).get('id');
       try {
         const detailResult = await axios.get(
-          `${process.env.REACT_APP_BASE_URL}/blogs/${id}/`,
+          `${process.env.REACT_APP_BASE_URL}/Blogger/${id}/`,
           {
             headers: {
               Authorization: `Bearer ${token}`
@@ -128,7 +128,7 @@ function ResponsiveCard() {
               <CardActionArea>
                 <CardMedia
                   component="img"
-                  image={detailData.file}
+                  image={detailData ? detailData.file : `${process.env.REACT_APP_BASE_URL}${detailData.image}`}
                   className={classes.media}
                   alt="Photo"
                 />
