@@ -128,10 +128,11 @@ function ResponsiveCard() {
               <CardActionArea>
                 <CardMedia
                   component="img"
-                  image={detailData ? detailData.file : `${process.env.REACT_APP_BASE_URL}${detailData.image}`}
+                  image={`${process.env.REACT_APP_BASE_URL}${detailData.file}`}
                   className={classes.media}
                   alt="Photo"
-                />
+                  />
+                  {/* // image={detailData ? detailData.file : `${process.env.REACT_APP_BASE_URL}${detailData.image}`} */}
                 <CardContent>
                   <Typography variant="h6">
                     {detailData.content}

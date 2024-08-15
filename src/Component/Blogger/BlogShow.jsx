@@ -235,10 +235,11 @@ const CardComponent = () => {
                             <CardActionArea>
                                 <CardMedia
                                     component="img"
-                                    src={photo ? photo.file : `${process.env.REACT_APP_BASE_URL}${photo.file}`} //{photo.file}
+                                    src={`${process.env.REACT_APP_BASE_URL}${photo.file}`}
                                     alt="Uploaded Image"
                                     className={classes.media}
                                 />
+                                {/* {photo ? photo.file : `${process.env.REACT_APP_BASE_URL}${photo.file}`} //{photo.file} */}
                                 <CardContent>
                                     <Typography variant="h6">{photo.title?.split(',')[0]}</Typography>
                                     <Typography variant="body2" color="textSecondary" component="p">
@@ -270,7 +271,7 @@ const CardComponent = () => {
                                 <CardMedia
                                     component="img"
                                     height="140"
-                                    image={add ? add.image : `${process.env.REACT_APP_BASE_URL}${add.image}`}
+                                    image={`${process.env.REACT_APP_BASE_URL}${add.image}`}
                                     alt={add.title}
                                     className={classes.media}
                                 />
